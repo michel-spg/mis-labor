@@ -1,0 +1,6 @@
+# normalize text files to LF in the repository
+* text=auto eol=lf
+
+# binary assets
+*.png   binary
+*.woff2 binary

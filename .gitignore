@@ -1,0 +1,21 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+
+# OneDrive conflict copies and temp files
+*-DESKTOP-*.*
+~$*
+
+# test / tool output
+.playwright-cli/
+node_modules/
+*.log
+
+# never publish solutions or school data
+*_loesung*.sql
+*musterloesung*
+.playwright-mcp/
