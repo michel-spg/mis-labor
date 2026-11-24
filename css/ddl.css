@@ -1,0 +1,99 @@
+/* Styles of chapter 02 (SQL DDL); builds on css/styles.css */
+:root { --kw: #7dd3fc; --ty: #fcd34d; --str: #86efac; --num: #f9a8d4; --cm: #8aa3b0; }
+
+/* SQL syntax colours on the dark code block */
+.tk-k { color: var(--kw); font-weight: 700; }
+.tk-t { color: var(--ty); }
+.tk-s { color: var(--str); }
+.tk-n { color: var(--num); }
+.tk-c { color: var(--cm); font-style: italic; }
+pre.ddl-sql { margin: 0; }
+pre.ddl-sql .ln { display: block; padding: 0 6px; margin: 0 -6px; border-left: 3px solid transparent; }
+pre.ddl-sql .ln.new { background: rgb(34 197 94 / .18); border-left-color: #4ade80; }
+.new-hint { background: #dcfce7; color: #14532d; padding: 0 6px; border-radius: 4px; font-weight: 600; }
+
+/* four sql groups */
+.sql-groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; margin: 12px 0; }
+.sql-group { background: #fff; border: 2px solid var(--line); border-radius: var(--radius); padding: 10px 14px; }
+.sql-group > b { font: 900 1.6rem/1 var(--sans); display: block; }
+.sql-group > small { color: var(--muted); text-transform: uppercase; letter-spacing: .08em; font-weight: 700; }
+.sql-group code { display: inline-block; margin: 6px 4px 0 0; }
+.sql-group p { margin: 8px 0 0; font-size: .92rem; }
+.sql-group.focus { border-color: var(--accent); background: var(--accent-soft); }
+.sql-group .here { display: block; margin-top: 6px; font-weight: 700; color: var(--accent-dark); font-size: .9rem; }
+
+/* naming example */
+.naming { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; align-self: start; }
+.naming-row { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.naming .tbl { font: 700 .95rem var(--mono); background: var(--navy); color: #fff; padding: 2px 10px; border-radius: 6px; }
+.naming .col { font: 700 .9rem var(--mono); padding: 1px 8px; border-radius: 4px; margin-left: 18px; }
+.naming .pkc { background: var(--pk-soft); color: #1e3a8a; }
+.naming .fkc { background: var(--fk-soft); color: #78350f; }
+.naming .note { color: var(--muted); font-size: .88rem; }
+
+table.types td, table.types th { white-space: normal; }
+table.types td:first-child { white-space: nowrap; }
+
+/* stepper layout */
+.ddl-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 18px; align-items: start; }
+.mini-h { margin: 10px 0 6px; font-size: .85rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.ddl-split .mini-h:first-child { margin-top: 0; }
+
+/* schema cards */
+.schema-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; }
+.ddl-table { background: #fff; border: 2px solid var(--navy); border-radius: 8px; overflow: hidden; font-size: .88rem; }
+.ddl-table-name { display: flex; justify-content: space-between; gap: 8px; background: var(--navy); color: #fff; padding: 3px 10px; font-family: var(--mono); }
+.ddl-table-name small { font: 400 .75rem var(--sans); color: #a5c0cc; align-self: center; }
+.ddl-table ul { list-style: none; margin: 0; padding: 4px 10px; }
+.ddl-table li { padding: 2px 0; border-bottom: 1px dotted var(--line); display: flex; flex-wrap: wrap; gap: 2px 6px; align-items: baseline; }
+.ddl-table li:last-child { border-bottom: 0; }
+.col-name { font: 700 .85rem var(--mono); }
+.col-name.is-pk { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.col-type { font: .78rem var(--mono); color: var(--muted); }
+.tag { font: 700 .66rem var(--mono); text-transform: uppercase; padding: 0 6px; border-radius: 4px; background: #e6ecee; color: var(--ink); white-space: nowrap; }
+.tag-pk { background: var(--pk-soft); color: #1e3a8a; }
+.tag-fk { background: var(--fk-soft); color: #78350f; }
+.ddl-note { margin: 0; padding: 3px 10px; border-top: 1px solid var(--line); font-size: .8rem; }
+.ddl-note small { color: var(--muted); }
+.data-pair { display: flex; flex-wrap: wrap; gap: 16px 22px; align-items: flex-start; margin-top: 12px; }
+
+/* labs */
+.lab-out { margin-top: 12px; }
+.lab-sql pre.sql { margin: 0 0 8px; }
+.lab-why { margin: 8px 0; }
+.lab-data { margin-top: 12px; }
+.lab-data summary { cursor: pointer; font-weight: 700; }
+.fk-options { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 10px; }
+.fk-options fieldset { border: 1px solid var(--line); border-radius: var(--radius); padding: 6px 12px 8px; display: flex; flex-wrap: wrap; gap: 4px 14px; background: #fff; }
+.fk-options legend { font: 700 .8rem var(--mono); padding: 0 6px; }
+.controls { margin: 8px 0; }
+
+/* sandbox + exercises */
+textarea.sql-input {
+  width: 100%; font: .9rem/1.5 var(--mono); background: var(--navy); color: #e6f0f3; border: 0; border-left: 5px solid var(--accent);
+  border-radius: var(--radius); padding: 12px 14px; resize: vertical; tab-size: 2; white-space: pre; overflow: auto;
+}
+textarea.sql-input::placeholder { color: #7f9aa8; }
+.sandbox-bar { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; margin-bottom: 8px; }
+.sandbox-bar select { font: inherit; padding: 3px 8px; border-radius: 6px; border: 2px solid var(--line); }
+.sandbox-out { margin-top: 10px; }
+.ddl-data { margin-top: 8px; }
+ol.sql-log { list-style: none; margin: 0 0 10px; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+ol.sql-log li { border-left: 5px solid var(--line); background: #fff; padding: 4px 10px; display: flex; flex-direction: column; font-size: .88rem; }
+ol.sql-log li.ok { border-left-color: var(--ok); }
+ol.sql-log li.err { border-left-color: var(--bad); background: var(--bad-soft); }
+ol.sql-log li.skipped { opacity: .55; }
+.sql-stmt { font-family: var(--mono); font-size: .8rem; color: var(--muted); overflow-wrap: anywhere; }
+.sql-stmt .tk-k { color: #0369a1; } .sql-stmt .tk-t { color: #b45309; } .sql-stmt .tk-s { color: #15803d; } .sql-stmt .tk-n { color: #be185d; }
+.sql-msg { font-weight: 600; }
+li.err .sql-msg { color: var(--bad); }
+li.ok .sql-msg { color: var(--ok); }
+.check-list { list-style: none; margin: 6px 0 0; padding: 0; font-weight: 400; }
+.check-list li.ok { color: var(--ok); }
+.check-list li.no { color: var(--bad); }
+.ex-setup { margin-bottom: 8px; }
+.ex-setup summary { cursor: pointer; font-weight: 600; color: var(--muted); }
+.sql-out { margin-top: 10px; }
+.ex-task ul, .ex-task ol { margin: 6px 0 0; padding-left: 22px; }
+
+@media (max-width: 800px) { .ddl-split { grid-template-columns: 1fr; } }

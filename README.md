@@ -23,6 +23,7 @@ Keine Installation, kein Build, keine externen Requests – die App läuft kompl
 | Nr | Seite | Thema | Inhalt | Übungen |
 |---|---|---|---|---|
 | 01 | `normalisierung.html` | Normalisierung (1.–3. NF) | Anomalie-Demo, FD-Detektiv, Schritt-für-Schritt-Animation (Laborbefund → Station/Patient/Messwert/Laborparameter), Merksätze | 5 |
+| 02 | `ddl.html` | SQL DDL | Schritt-für-Schritt `CREATE TABLE`, Constraint-Labor, ON DELETE/UPDATE-Labor, SQL-Spielwiese (läuft im Browser), Merksätze | 11 |
 
 Jedes Kapitel hat denselben Aufbau: **Teil 1 – Verstehen** und **Teil 2 – Üben** (leicht → schwer).
 
@@ -93,3 +94,16 @@ vom Code im Übungskatalog des Kapitels (`normExercises.js`) – neue Aufgaben s
 ## Änderungsprotokoll
 
 - **Kapitel 01 – Normalisierung:** Seite `normalisierung.html` mit Anomalie-Demo, FD-Detektiv, Animation UNF → 3NF und 5 Übungen.
+
+### Kapitel 02: SQL DDL und die Mini-SQL-Engine
+
+Die Seite führt SQL **wirklich aus**: `js/ddl/sqlEngine.js` (`MiniSql`) ist eine kleine, abhängigkeitsfreie SQL-Engine im MySQL-Stil mit deutschen Fehlermeldungen.
+Sie versteht `CREATE/ALTER/DROP/RENAME TABLE`, `CREATE/DROP INDEX`, `INSERT`, `UPDATE`, `DELETE`, ein einfaches `SELECT` und die Constraints
+`NOT NULL`, `DEFAULT`, `AUTO_INCREMENT`, `PRIMARY KEY`, `UNIQUE`, `CHECK` und `FOREIGN KEY` (`ON DELETE/UPDATE` mit `NO ACTION`, `CASCADE`, `SET NULL`).
+Die SQL-Übungen prüfen das Verhalten (z. B. „wird Station 9 abgelehnt?“) statt den Text zu vergleichen.
+
+Tests der Engine (Node ≥ 18, keine Installation nötig):
+
+```
+node --test tests/
+```
