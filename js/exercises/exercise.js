@@ -45,7 +45,7 @@ class Exercise {
       <header class="ex-head">
         <h3>${title}</h3><span class="level level-${level}">${level}</span>
       </header>
-      <p class="ex-task">${task}</p>
+      <div class="ex-task">${task}</div>
       <div class="ex-body"></div>
       <div class="ex-actions">
         <button class="btn primary" data-act="check">Prüfen</button>

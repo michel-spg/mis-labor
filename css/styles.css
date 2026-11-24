@@ -385,3 +385,6 @@ pre.sql {
 [hidden] { display: none !important; }
 /* inline-block values do not inherit text-decoration from the cell */
 table.data tr.dup .v, table.data tr.gone .v { text-decoration: line-through; text-decoration-color: var(--bad); text-decoration-thickness: 2px; }
+
+.ex-task { margin: 1em 0; }
+.ex-task > :first-child { margin-top: 0; }

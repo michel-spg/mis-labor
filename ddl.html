@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SQL DDL · MIS-Labor</title>
+  <link rel="icon" href="img/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/ddl.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Zum Inhalt springen</a>
+  <header class="topbar">
+    <div class="wrap topbar-in">
+      <a class="brand" href="index.html"><img class="brand-logo" src="img/logo.svg" alt=""><span class="brand-name">MIS-Labor</span></a>
+      <nav class="chapter-nav" aria-label="Kapitel">
+        <a href="normalisierung.html"><span class="nr">01</span> Normalisierung</a>
+        <a href="ddl.html" aria-current="page"><span class="nr">02</span> SQL DDL</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="hero">
+    <svg class="ecg" viewBox="0 0 1200 90" preserveAspectRatio="none" aria-hidden="true"><path d="M0 60 H110 l8 -6 l8 6 H150 l6 10 l9 -52 l9 62 l7 -20 H230 q14 -16 28 0 H410 l8 -6 l8 6 H450 l6 10 l9 -52 l9 62 l7 -20 H530 q14 -16 28 0 H710 l8 -6 l8 6 H750 l6 10 l9 -52 l9 62 l7 -20 H830 q14 -16 28 0 H1010 l8 -6 l8 6 H1050 l6 10 l9 -52 l9 62 l7 -20 H1130 q14 -16 28 0 H1200"/></svg>
+    <div class="wrap">
+      <p class="eyebrow">MIS · Datenbanken · Kapitel 2</p>
+      <h1>SQL DDL<span>Tabellen, Schlüssel und Constraints – die Datenbank aus Kapitel 1 wird echtes SQL</span></h1>
+    </div>
+  </div>
+  <nav class="subnav" aria-label="Auf dieser Seite">
+    <div class="wrap subnav-in">
+      <a href="#teil1">Teil 1<span class="sub-long"> · Verstehen</span></a>
+      <a href="#schritte"><span class="sub-long">Schritt für Schritt</span><span class="sub-short">Animation</span></a>
+      <a href="#constraints">Constraints</a>
+      <a href="#merksaetze">Merksätze</a>
+      <a href="#teil2">Teil 2<span class="sub-long"> · Üben</span></a>
+      <a href="#spielwiese">Spielwiese</a>
+    </div>
+  </nav>
+
+  <main id="main" class="wrap">
+    <!-- ============================== TEIL 1 ============================== -->
+    <section id="teil1">
+      <h2 class="part"><span>Teil 1</span> Wie legt man Tabellen in SQL an?</h2>
+
+      <div class="section">
+        <h3>1 · SQL hat vier Teilsprachen</h3>
+        <p>In Kapitel 1 haben wir die Laborauswertung in <b>Tabellen</b> zerlegt. Jetzt bauen wir sie in der Datenbank auf. Dafür gibt es die
+          <b>DDL</b> (<i>Data Definition Language</i>): Sie beschreibt, <b>wie die Tabellen aussehen</b> – nicht, was drinsteht.</p>
+        <div class="sql-groups">
+          <div class="sql-group focus"><b>DDL</b><small>definieren</small><code>CREATE</code><code>ALTER</code><code>DROP</code><code>RENAME</code><p>Strukturen: Datenbanken, Tabellen, Indizes, Sichten</p><span class="here">← Thema dieses Kapitels</span></div>
+          <div class="sql-group"><b>DML</b><small>manipulieren</small><code>INSERT</code><code>UPDATE</code><code>DELETE</code><p>Daten einfügen, ändern, löschen</p></div>
+          <div class="sql-group"><b>DQL</b><small>abfragen</small><code>SELECT</code><p>Daten lesen – ohne etwas zu verändern</p></div>
+          <div class="sql-group"><b>DCL</b><small>kontrollieren</small><code>GRANT</code><code>REVOKE</code><p>Zugriffsrechte von Benutzer*innen</p></div>
+        </div>
+        <p class="muted">Kommentare im Skript: <code>-- Kommentar</code> (nach den zwei Strichen ein Leerzeichen!), <code># Kommentar</code> oder <code>/* … */</code>. Jeder Befehl endet mit <code>;</code>.</p>
+      </div>
+
+      <div class="section">
+        <h3>2 · Namenskonventionen und Schlüssel</h3>
+        <div class="two-col">
+          <div>
+            <p>Damit auch große Datenbanken lesbar bleiben, gelten feste Regeln:</p>
+            <ul>
+              <li><b>Kleinbuchstaben</b> (SQL unterscheidet Groß-/Kleinschreibung bei Befehlen nicht), keine Umlaute, kein ß.</li>
+              <li>Tabellennamen in der <b>Mehrzahl</b>.</li>
+              <li>Jede Tabelle hat ein <b>Präfix</b>, das im ganzen Schema nur einmal vergeben wird. <b>Alle</b> Spalten der Tabelle tragen es: <code>st_name</code>, <code>st_betten</code>.</li>
+              <li><b>Fremdschlüssel</b>: eigenes Präfix <b>und</b> Präfix der Quelltabelle: <code>p_st_statnr</code>.</li>
+              <li><code>id</code> = alphanumerisch, <code>nr</code> = numerisch.</li>
+            </ul>
+          </div>
+          <div class="naming">
+            <div class="naming-row"><span class="tbl">st_stationen</span><span class="note">Präfix <b>st_</b>, Mehrzahl</span></div>
+            <div class="naming-row"><span class="col pkc">st_statnr</span><span class="note">Primärschlüssel</span></div>
+            <div class="naming-row"><span class="tbl">p_patienten</span><span class="note">Präfix <b>p_</b></span></div>
+            <div class="naming-row"><span class="col fkc">p_st_statnr</span><span class="note">Fremdschlüssel = <b>p_</b> + <b>st_</b> + statnr</span></div>
+          </div>
+        </div>
+        <h4 style="margin-top:14px">Schlüsselarten</h4>
+        <div class="rules">
+          <div class="rule"><b>Primärschlüssel (PK)</b><p>Identifiziert eine Zeile <b>eindeutig</b>, nie NULL. <b>VSA</b> = Vollschlüsselattribut (ein Feld), <b>TSA</b> = Teilschlüsselattribut (der PK besteht aus mehreren Feldern).</p></div>
+          <div class="rule"><b>Fremdschlüssel (FK)</b><p>Enthält Werte eines Primärschlüssels einer anderen (oder der <b>gleichen</b>) Tabelle. <b>FSA</b> = Fremdschlüsselattribut. Kann aus mehreren Spalten bestehen.</p></div>
+        </div>
+      </div>
+
+      <div class="section" id="schritte">
+        <h3>3 · Schritt für Schritt: vom Entwurf zum CREATE TABLE</h3>
+        <p>Klicke auf <b>Weiter</b> (oder benutze die Pfeiltasten ← →). Die <span class="new-hint">grün hinterlegten Zeilen</span> sind im jeweiligen Schritt neu.
+          Rechts siehst du, was die Datenbank daraus wirklich macht – das Skript wird im Browser tatsächlich ausgeführt.</p>
+        <div id="ddl-steps" class="panel"></div>
+      </div>
+
+      <div class="section">
+        <h3>4 · Die wichtigsten Datentypen</h3>
+        <div class="tbl-scroll">
+          <table class="data types">
+            <thead><tr><th>Typ</th><th>Bedeutung</th><th>Beispiel im Labor</th></tr></thead>
+            <tbody>
+              <tr><td><code>INTEGER</code></td><td>ganze Zahl</td><td><code>st_betten</code> = 24</td></tr>
+              <tr><td><code>DECIMAL(n,m)</code> / <code>NUMERIC(n,m)</code></td><td>exakte Dezimalzahl: n Stellen insgesamt, davon m nach dem Komma</td><td><code>m_wert decimal(7,2)</code> → 13.40</td></tr>
+              <tr><td><code>FLOAT</code>, <code>DOUBLE</code>, <code>REAL</code></td><td>Näherungswerte (Gleitkomma) – <b>nicht</b> für Geld oder exakte Werte</td><td>Messreihen aus Geräten</td></tr>
+              <tr><td><code>CHAR(n)</code></td><td>Text mit <b>fester</b> Länge n</td><td><code>char(2)</code> Länderkürzel</td></tr>
+              <tr><td><code>VARCHAR(n)</code></td><td>Text mit <b>variabler</b> Länge bis n Zeichen</td><td><code>p_nachname varchar(30)</code></td></tr>
+              <tr><td><code>DATE</code>, <code>TIME</code>, <code>TIMESTAMP</code></td><td>Datum · Uhrzeit · Datum + Uhrzeit (<code>'JJJJ-MM-TT'</code>)</td><td><code>p_geburtsdatum date</code></td></tr>
+              <tr><td><code>TINYINT</code></td><td>kleine ganze Zahl, auch als Ersatz für Wahr/Falsch (früher BOOLEAN)</td><td>0 / 1</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="muted" style="margin-top:8px">Optionale Zusätze: <code>UNSIGNED</code> (nur positive Zahlen, doppelt so großer positiver Bereich) und <code>ZEROFILL</code> (mit 0 auffüllen: 7 in <code>INT(3)</code> → 007).
+          Texte und Datumswerte stehen in <b>Hochkommas</b>: <code>'Berger'</code>, <code>'2008-04-12'</code>.</p>
+      </div>
+
+      <div class="section" id="constraints">
+        <h3>5 · Constraints: Regeln, die die Datenbank selbst überwacht</h3>
+        <p><b>Constraints</b> (Bedingungen) werden beim Einfügen, Ändern und Löschen geprüft. Verletzt eine Zeile die Regel, wird der <b>ganze Befehl abgelehnt</b>.
+          Man kann sie direkt bei der Spalte schreiben (<b>Spaltenconstraint</b>) oder nach allen Spalten (<b>Tabellenconstraint</b>).</p>
+        <div class="tbl-scroll">
+          <table class="data types">
+            <thead><tr><th>Constraint</th><th>Regel</th><th>Beispiel</th></tr></thead>
+            <tbody>
+              <tr><td><code>NOT NULL</code></td><td>Wert darf nicht fehlen</td><td><code>st_name varchar(40) not null</code></td></tr>
+              <tr><td><code>PRIMARY KEY</code></td><td>eindeutig <b>und</b> nicht NULL</td><td><code>primary key (m_p_patnr, m_lp_parameter)</code></td></tr>
+              <tr><td><code>UNIQUE</code></td><td>Wert kommt nur einmal vor (NULL darf öfter vorkommen)</td><td><code>st_name … unique</code></td></tr>
+              <tr><td><code>FOREIGN KEY</code></td><td>Wert muss als Schlüssel in der Elterntabelle existieren</td><td><code>foreign key (p_st_statnr) references st_stationen (st_statnr)</code></td></tr>
+              <tr><td><code>DEFAULT</code></td><td>Vorgabewert, wenn nichts angegeben wird</td><td><code>st_betten integer default 20</code></td></tr>
+              <tr><td><code>CHECK (…)</code></td><td>beliebige Bedingung muss wahr sein</td><td><code>check (st_betten &gt; 0)</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h4 style="margin-top:16px">Brich die Regeln!</h4>
+        <div id="constraint-lab" class="panel"></div>
+      </div>
+
+      <div class="section" id="fk-aktionen">
+        <h3>6 · FOREIGN KEY: ON DELETE und ON UPDATE</h3>
+        <p>Was passiert mit den Patient*innen, wenn ihre Station gelöscht oder umnummeriert wird? Das legt der Fremdschlüssel mit <code>ON DELETE</code> / <code>ON UPDATE</code> fest:</p>
+        <div class="rules">
+          <div class="rule"><b>NO ACTION</b><p>Standard. Es passiert <b>nichts</b>: Der Befehl wird <b>abgelehnt</b>, solange ein Fremdschlüssel auf die Zeile zeigt.</p></div>
+          <div class="rule"><b>CASCADE</b><p>Die Änderung wird <b>weitergegeben</b>: Beim Löschen werden die abhängigen Zeilen mitgelöscht, beim Ändern wird der Fremdschlüssel mitgeändert.</p></div>
+          <div class="rule"><b>SET NULL</b><p>Der Fremdschlüssel wird auf <b>NULL</b> gesetzt. Die Spalte darf dafür nicht NOT NULL sein.</p></div>
+        </div>
+        <h4 style="margin-top:14px">Teste die Aktionen</h4>
+        <div id="fk-lab" class="panel"></div>
+      </div>
+
+      <div class="section">
+        <h3>7 · Tabellen ändern und löschen</h3>
+        <div class="two-col">
+          <div>
+            <p>Strukturen kann man auch <b>nachträglich</b> ändern:</p>
+            <pre class="sql ddl-sql"><span class="ln"><span class="tk-c">-- Spalte hinzufügen / ändern / löschen</span></span><span class="ln"><span class="tk-k">alter table</span> st_stationen <span class="tk-k">add</span> st_telefon <span class="tk-t">varchar</span>(20);</span><span class="ln"><span class="tk-k">alter table</span> st_stationen <span class="tk-k">modify</span> st_telefon <span class="tk-t">varchar</span>(30);</span><span class="ln"><span class="tk-k">alter table</span> st_stationen <span class="tk-k">drop column</span> st_telefon;</span><span class="ln"> </span><span class="ln"><span class="tk-c">-- Constraint nachträglich</span></span><span class="ln"><span class="tk-k">alter table</span> p_patienten</span><span class="ln">  <span class="tk-k">add constraint</span> fk_p_st <span class="tk-k">foreign key</span> (p_st_statnr)</span><span class="ln">  <span class="tk-k">references</span> st_stationen (st_statnr);</span><span class="ln"> </span><span class="ln"><span class="tk-k">rename table</span> st_stationen <span class="tk-k">to</span> st_abteilungen;</span><span class="ln"><span class="tk-k">drop table</span> p_patienten;</span></pre>
+          </div>
+          <div>
+            <div class="callout"><b>Beim Nachrüsten werden die Daten geprüft</b>
+              <p>Legst du einen Fremdschlüssel erst <b>nach</b> dem Einfügen an, prüft die Datenbank alle vorhandenen Zeilen. Gibt es eine „verwaiste“ Zeile, wird der Constraint abgelehnt – erst die Daten reparieren.</p></div>
+            <div class="callout" style="margin-top:10px"><b>Reihenfolge merken</b>
+              <p><b>Anlegen &amp; Einfügen:</b> erst Eltern, dann Kinder.<br><b>Löschen (<code>DROP TABLE</code>):</b> erst Kinder, dann Eltern.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section" id="merksaetze">
+        <h3>8 · Merksätze</h3>
+        <div class="rules">
+          <div class="rule"><b>DDL = Struktur</b><ul><li><code>CREATE</code>, <code>ALTER</code>, <code>DROP</code></li><li>DML ändert Daten, DQL liest, DCL regelt Rechte.</li></ul></div>
+          <div class="rule"><b>CREATE TABLE</b><ul><li>Name + Spalten in Klammern, durch Komma getrennt.</li><li>Jede Spalte: <b>Name Datentyp [Constraints]</b>.</li><li>Befehl endet mit <code>;</code>.</li></ul></div>
+          <div class="rule"><b>Constraints</b><ul><li>NOT NULL · PRIMARY KEY · UNIQUE · FOREIGN KEY · DEFAULT · CHECK</li><li>Mehrspaltige Schlüssel: Tabellenconstraint.</li></ul></div>
+          <div class="rule"><b>Fremdschlüssel</b><ul><li>Elterntabelle zuerst anlegen.</li><li>ON DELETE / ON UPDATE: NO ACTION, CASCADE, SET NULL.</li></ul></div>
+        </div>
+        <div class="callout"><b>Und der Zusammenhang zu Kapitel 1:</b>
+          <p>Das Ergebnis der Normalisierung – <code>Station</code>, <code>Patient</code>, <code>Laborparameter</code>, <code>Messwert</code> – wird hier zu vier <code>CREATE TABLE</code>-Befehlen.
+            Aus den <b>Primär- und Fremdschlüsseln</b> der 3. NF werden <code>PRIMARY KEY</code> und <code>FOREIGN KEY</code>.</p></div>
+      </div>
+    </section>
+
+    <!-- ============================== TEIL 2 ============================== -->
+    <section id="teil2">
+      <h2 class="part"><span>Teil 2</span> Üben und Ausprobieren</h2>
+
+      <div class="section" id="spielwiese">
+        <h3>Spielwiese: dein eigenes SQL</h3>
+        <p>Tippe SQL, drücke <b>Strg + Enter</b> (oder <b>Ausführen</b>) und sieh, was passiert: Protokoll, Struktur und Daten.
+          Die Spielwiese versteht <code>CREATE</code>, <code>ALTER</code>, <code>DROP</code>, <code>RENAME</code>, <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code> und ein einfaches <code>SELECT</code>.
+          Bei einem Fehler stoppt das Skript – wie in der MySQL Workbench. Nichts wird gespeichert; alles bleibt in deinem Browser.</p>
+        <div id="sandbox" class="panel"></div>
+        <p class="disclaimer" role="note" style="margin-top:12px"><b>Hinweis:</b> Das ist eine vereinfachte Lernumgebung, kein echtes MySQL. Für die Übungsbeispiele aus dem Unterricht
+          (Schuldatenbank, Versand) nimm weiterhin die MySQL Workbench – hier kannst du aber jeden Teil vorher gefahrlos ausprobieren.</p>
+      </div>
+
+      <h3 id="uebungen" style="margin-top:28px">Übungen</h3>
+      <p>Löse die Aufgaben, klicke auf <b>Prüfen</b> – und erst wenn du nicht weiterkommst auf <b>Lösung anzeigen</b>. Bei den SQL-Aufgaben wird dein Skript <b>wirklich ausgeführt</b>
+        und mit Testeinträgen geprüft (z. B. „wird eine unbekannte Station abgelehnt?“). Eigene Schreibweisen sind erlaubt, solange die Regeln wirken.</p>
+      <div id="exercises" class="exercises"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <nav aria-labelledby="ft-kapitel">
+        <h2 id="ft-kapitel">Kapitel</h2>
+        <ul>
+          <li><a href="index.html">Übersicht</a></li>
+          <li><a href="normalisierung.html">01 Normalisierung</a></li>
+          <li><a href="ddl.html" aria-current="page">02 SQL DDL</a></li>
+        </ul>
+      </nav>
+      <nav aria-labelledby="ft-recht">
+        <h2 id="ft-recht">Rechtliches</h2>
+        <ul>
+          <li><a href="impressum.html">Impressum</a></li>
+          <li><a href="impressum.html#datenschutz">Datenschutz</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="wrap"><p class="footer-note">Unterrichtsmaterial · alle Personen und Befunde in den Beispielen sind frei erfunden</p></div>
+  </footer>
+
+  <script src="js/common/nav.js"></script>
+  <script src="js/common/flip.js"></script>
+  <script src="js/common/relationView.js"></script>
+  <script src="js/common/sceneStepper.js"></script>
+  <script src="js/common/dragDrop.js"></script>
+  <script src="js/exercises/exercise.js"></script>
+  <script src="js/exercises/dragMatchExercise.js"></script>
+  <script src="js/exercises/choiceQuiz.js"></script>
+  <script src="js/ddl/sqlEngine.js"></script>
+  <script src="js/ddl/ddlData.js"></script>
+  <script src="js/ddl/ddlView.js"></script>
+  <script src="js/ddl/ddlSteps.js"></script>
+  <script src="js/ddl/constraintLab.js"></script>
+  <script src="js/ddl/sqlSandbox.js"></script>
+  <script src="js/ddl/sqlExercise.js"></script>
+  <script src="js/ddl/ddlExercises.js"></script>
+  <script src="js/ddl/ddlPage.js"></script>
+</body>
+</html>
